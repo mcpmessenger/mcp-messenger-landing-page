@@ -10,6 +10,8 @@ const nextConfig = {
   generateBuildId: async () => {
     return `build-${Date.now()}-${Math.random().toString(36).substring(7)}`
   },
+  // For AWS Amplify - use standalone output
+  output: process.env.AMPLIFY ? 'standalone' : undefined,
 }
 
 export default nextConfig
