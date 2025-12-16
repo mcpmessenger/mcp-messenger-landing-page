@@ -437,12 +437,12 @@ export default function GlazyrCRM() {
                 onClick={handleClearAll} 
                 disabled={contacts.length === 0 || isLoading}
                 title={contacts.length === 0 ? "No contacts to clear" : "Clear all contacts"}
-                className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950"
+                className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950 border-red-300 dark:border-red-700"
               >
-                <Trash2 className="h-4 w-4 sm:mr-2" />
+                <Trash2 className="h-4 w-4 mr-1 sm:mr-2" />
                 <span className="hidden sm:inline">Clear All</span>
+                <span className="sm:hidden">Clear</span>
               </Button>
-              {/* Force deployment update */}
               <Button variant="outline" size="sm" onClick={handleExportCSV} disabled={contacts.length === 0}>
                 <Download className="h-4 w-4 sm:mr-2" />
                 <span className="hidden sm:inline">Export</span>
