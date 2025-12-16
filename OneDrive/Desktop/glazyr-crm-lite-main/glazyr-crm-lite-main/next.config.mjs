@@ -6,9 +6,13 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Force fresh builds
+  // Disable all caching for fresh builds
+  experimental: {
+    isrMemoryCacheSize: 0,
+  },
+  // Force unique build ID
   generateBuildId: async () => {
-    return `build-${Date.now()}`
+    return `build-${Date.now()}-${Math.random().toString(36).substring(7)}`
   },
 }
 
