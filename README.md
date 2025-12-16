@@ -1,37 +1,35 @@
-# Agent Orchestrator Frontend
+# Agent Orchestrator Workspace
 
-This repo powers the public-facing UI that orchestrates your AI agents. It is wired directly to your `v0.app` chat deployment and keeps everything in sync with each push.
+This workspace combines the **frontend orchestrator UI** (under `agent-orchestrator-main`) with the **FastAPI backend orchestrator** (under `agent-orchestrator`). Both stacks live alongside each other so you can iterate on the surface and the routing engine without jumping between repositories.
 
 [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/sentilabs/v0-agent-orchestrator-frontend) [![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/eE3GXgFOAV1)
 
-## What Makes It Fire
+## Frontend stack (`agent-orchestrator-main`)
+- **Next.js + Tailwind UI**: The React surface renders query orchestration controls, feature flags, and server-management cards with composable primitives in `components/ui`.
+- **Auto-sync with v0**: The repo mirrors changes pushed from your v0.app chat, and every commit triggers a Vercel deployment so the UI stays in sync.
+- **Development workflow**:
+  1. `cd agent-orchestrator-main`
+  2. `pnpm install`
+  3. `pnpm dev` → http://localhost:3000
+  4. `pnpm build` / `pnpm lint` before release commits.
 
-- **Modern Next.js + Tailwind stack**: Structured routing, clean global styles, and a tokenized utility layer make it simple to expand screens.
-- **Composable UI primitives**: `components/ui` contains reusable controls that mirror the v0 experience but allow you to extend interactions when needed.
-- **Agent orchestration focus**: `components/query-orchestration.tsx` and `components/server-management.tsx` wrap the experience around multi-agent execution and deployment oversight.
-- **Auto-deploy workflow**: Changes committed here can flow through Vercel for preview/staging with your v0-backed backend staying live and upgraded.
-
-## Local development
-
-1. Clone the repo and install dependencies:
-   ```
-   pnpm install
-   ```
-2. Start the dev server (hot reload + Fast Refresh):
-   ```
-   pnpm dev
-   ```
-3. Open `http://localhost:3000` to see the Orchestrator UI and experiment with agent queries.
+## Backend stack (`agent-orchestrator`)
+- **FastAPI orchestrator API**: `main.py` exposes `/api/route`, `/api/execute`, `/api/servers`, and `/api/admin/register-server` to manage MCP server routing and execution decisions.
+- **Routing + registry modules**: `routing.py` picks which MCP servers handle a query and `registry.py` keeps the server inventory + health metadata.
+- **Start locally**:
+  1. `cd agent-orchestrator`
+  2. `python -m venv venv` (or `venv_windows` on PowerShell)
+  3. `venv\\Scripts\\Activate.ps1` / `source venv/bin/activate`
+  4. `pip install -r requirements.txt`
+  5. `uvicorn main:app --reload`
 
 ## Deployments
+- **Frontend**: https://vercel.com/sentilabs/v0-agent-orchestrator-frontend
+- **Backend**: Run locally or containerize the FastAPI app (use `start-server.ps1` to launch with the right virtualenv).
 
-- **Live site**: [https://vercel.com/sentilabs/v0-agent-orchestrator-frontend](https://vercel.com/sentilabs/v0-agent-orchestrator-frontend)
-- **Authoring workspace**: [https://v0.app/chat/eE3GXgFOAV1](https://v0.app/chat/eE3GXgFOAV1)
+## Keep both in sync
+1. Work inside the repo you are changing (`agent-orchestrator-main` for UI, `agent-orchestrator` for backend routing).
+2. Commit and push to the same remote so `git push agent-orchestrator main` updates both sides from the parent folder.
+3. Re-run `git pull agent-orchestrator main --allow-unrelated-histories` if you ever see divergent histories.
 
-## Keep it synced
-
-1. Make your UI edits locally or inside [v0.app](https://v0.app).
-2. Commit and push to this repo (`git push agent-orchestrator main`).
-3. Vercel automatically deploys the latest build, and your v0 chat stays in sync.
-
-If something feels off, rerun `git fetch agent-orchestrator` and merge carefully—this repo and the `agent-orchestrator` remote can diverge because the stack lives inside your parent directory.
+Questions? Just ask: this workspace mixes two stacks but pushes to the same GitHub remote (`mcpmessenger/agent-orchestrator`) so you always land in the right place.
