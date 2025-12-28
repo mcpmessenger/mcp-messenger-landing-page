@@ -1,12 +1,13 @@
 version: 1
 frontend:
   phases:
+    install:
+      commands:
+        - echo "Installing dependencies with npm"
+        - npm ci
     preBuild:
       commands:
-        - echo "Using npm as package manager"
-        - which npm || echo "npm not found in PATH"
-        - npm --version
-        - npm ci
+        - echo "Pre-build phase"
     build:
       commands:
         - npm run build
